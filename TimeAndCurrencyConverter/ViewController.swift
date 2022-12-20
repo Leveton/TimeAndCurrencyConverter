@@ -29,7 +29,8 @@ struct SwiftUIView: View {
     @State public var dollarText = ""
     
     var body: some View {
-        let today = Date()
+      let today = Date()
+      VStack {
         if let PSTDate = Calendar.current.date(byAdding: .hour, value: -5, to: today) {
             VStack {
                 Text("PST")
@@ -46,18 +47,27 @@ struct SwiftUIView: View {
             .padding()
         }
         
+        if let UTCDate = Calendar.current.date(byAdding: .hour, value: +3, to: today) {
+            VStack {
+                Text("UTC")
+                Text(UTCDate, format: .dateTime.hour().minute())
+            }
+            .padding()
+        }
+        
         VStack {
-            Text("Dollar amount")
+            Text("Dollar amount (ARS/290)")
                 .padding()
             Text(dollarText)
             if dollarText.count > 0 {
                 Text("Peso Amount")
                     .padding()
             }
+          
             TextField("Enter Argentine Peso", text: $pesoText)
                 .onChange(of: pesoText) { _ in
                     if let peso = Float(pesoText) {
-                        let conversion = peso * 0.0063
+                        let conversion = peso / 290
                         let roundedValue = round(conversion * 100) / 100.0
                         dollarText = String(roundedValue)
                     } else {
@@ -66,12 +76,13 @@ struct SwiftUIView: View {
                 }
                 .disableAutocorrection(true)
                 .multilineTextAlignment(.center)
+                .keyboardType(.numberPad)
         }
         .padding()
         
         //Text(Date.now, format: .dateTime.hour().minute())
-        
-            
+      }
+      Spacer()
     }
 }
 
