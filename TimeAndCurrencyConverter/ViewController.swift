@@ -32,73 +32,74 @@ struct SwiftUIView: View {
     var body: some View {
       let today = Date()
       
-      VStack {
-        if let PSTDate = Calendar.current.date(byAdding: .hour, value: -3, to: today) {
-            VStack {
-                Text("PST")
-                Text(PSTDate, format: .dateTime.hour().minute())
-            }
-            .padding()
-        }
+      ScrollView {
+        LazyVStack {
+          if let PSTDate = Calendar.current.date(byAdding: .hour, value: -3, to: today) {
+              VStack {
+                  Text("PST")
+                  Text(PSTDate, format: .dateTime.hour().minute())
+              }
+              .padding()
+          }
+          
+          if let ESTDate = Calendar.current.date(byAdding: .hour, value: 0, to: today) {
+              VStack {
+                  Text("EST")
+                  Text(ESTDate, format: .dateTime.hour().minute())
+              }
+              .padding()
+          }
+          
+          if let UTCDate = Calendar.current.date(byAdding: .hour, value: +5, to: today) {
+              VStack {
+                  Text("UTC")
+                  Text(UTCDate, format: .dateTime.hour().minute())
+              }
+              .padding()
+          }
+          
+          if let BairesDate = Calendar.current.date(byAdding: .hour, value: +2, to: today) {
+              VStack {
+                  Text("Buenos Aires")
+                  Text(BairesDate, format: .dateTime.hour().minute())
+              }
+              .padding()
+          }
+          
+
         
-        if let ESTDate = Calendar.current.date(byAdding: .hour, value: 0, to: today) {
-            VStack {
-                Text("EST")
-                Text(ESTDate, format: .dateTime.hour().minute())
-            }
-            .padding()
-        }
+          Text("Dollar amount (COP/4531)")
+          Text(dollarText)
+          if dollarText.count > 0 {
+              Text("Colombian Peso Amount")
+          }
         
-        if let UTCDate = Calendar.current.date(byAdding: .hour, value: +5, to: today) {
-            VStack {
-                Text("UTC")
-                Text(UTCDate, format: .dateTime.hour().minute())
-            }
-            .padding()
-        }
-        
-        if let BairesDate = Calendar.current.date(byAdding: .hour, value: +2, to: today) {
-            VStack {
-                Text("Buenos Aires")
-                Text(BairesDate, format: .dateTime.hour().minute())
-            }
-            .padding()
-        }
-        
+          TextField("Enter Colombian Peso", text: $pesoText)
+              .onChange(of: pesoText) { _ in
+                  if let peso = Float(pesoText) {
+                      let conversion = peso / 4531
+                      let roundedValue = round(conversion * 100) / 100.0
+                    
+                    let argentinaConversion = peso / 27.51
+                    let argentinaRoundedValue = round(argentinaConversion * 100) / 100.0
+                    
+                      dollarText = String(roundedValue)
+                    argentinaDollarText = String(argentinaRoundedValue)
+                  } else {
+                      dollarText = ""
+                    argentinaDollarText = ""
+                  }
+              }
+              .disableAutocorrection(true)
+              .multilineTextAlignment(.center)
+              .keyboardType(.numberPad)
+          
 //          Text("Dollar amount (ARS/290)")
-//              .padding()
 //          Text(argentinaDollarText)
-      
-        Text("Dollar amount (COP/4531)")
-            .padding()
-        Text(dollarText)
-        if dollarText.count > 0 {
-            Text("Colombian Peso Amount")
-                .padding()
+          //Text(Date.now, format: .dateTime.hour().minute())
         }
-      
-        TextField("Enter Colombian Peso", text: $pesoText)
-            .onChange(of: pesoText) { _ in
-                if let peso = Float(pesoText) {
-                    let conversion = peso / 4531
-                    let roundedValue = round(conversion * 100) / 100.0
-                  
-                  let argentinaConversion = peso / 290
-                  let argentinaRoundedValue = round(argentinaConversion * 100) / 100.0
-                  
-                    dollarText = String(roundedValue)
-                  argentinaDollarText = String(argentinaRoundedValue)
-                } else {
-                    dollarText = ""
-                  argentinaDollarText = ""
-                }
-            }
-            .disableAutocorrection(true)
-            .multilineTextAlignment(.center)
-            .keyboardType(.numberPad)
-        
-        //Text(Date.now, format: .dateTime.hour().minute())
       }
+      
       Spacer()
       
     }
