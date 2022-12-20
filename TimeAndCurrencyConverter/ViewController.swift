@@ -25,13 +25,15 @@ class ViewController: UIViewController {
 class HomeViewHostingController: UIHostingController<SwiftUIView> {}
 
 struct SwiftUIView: View {
-    @State public var pesoText = ""
-    @State public var dollarText = ""
+   @State public var pesoText = ""
+   @State public var dollarText = ""
+   @State public var argentinaDollarText = ""
     
     var body: some View {
       let today = Date()
+      
       VStack {
-        if let PSTDate = Calendar.current.date(byAdding: .hour, value: -5, to: today) {
+        if let PSTDate = Calendar.current.date(byAdding: .hour, value: -3, to: today) {
             VStack {
                 Text("PST")
                 Text(PSTDate, format: .dateTime.hour().minute())
@@ -39,7 +41,7 @@ struct SwiftUIView: View {
             .padding()
         }
         
-        if let ESTDate = Calendar.current.date(byAdding: .hour, value: -2, to: today) {
+        if let ESTDate = Calendar.current.date(byAdding: .hour, value: 0, to: today) {
             VStack {
                 Text("EST")
                 Text(ESTDate, format: .dateTime.hour().minute())
@@ -47,7 +49,7 @@ struct SwiftUIView: View {
             .padding()
         }
         
-        if let UTCDate = Calendar.current.date(byAdding: .hour, value: +3, to: today) {
+        if let UTCDate = Calendar.current.date(byAdding: .hour, value: +5, to: today) {
             VStack {
                 Text("UTC")
                 Text(UTCDate, format: .dateTime.hour().minute())
@@ -55,34 +57,50 @@ struct SwiftUIView: View {
             .padding()
         }
         
-        VStack {
-            Text("Dollar amount (ARS/290)")
-                .padding()
-            Text(dollarText)
-            if dollarText.count > 0 {
-                Text("Peso Amount")
-                    .padding()
+        if let BairesDate = Calendar.current.date(byAdding: .hour, value: +2, to: today) {
+            VStack {
+                Text("Buenos Aires")
+                Text(BairesDate, format: .dateTime.hour().minute())
             }
-          
-            TextField("Enter Argentine Peso", text: $pesoText)
-                .onChange(of: pesoText) { _ in
-                    if let peso = Float(pesoText) {
-                        let conversion = peso / 290
-                        let roundedValue = round(conversion * 100) / 100.0
-                        dollarText = String(roundedValue)
-                    } else {
-                        dollarText = ""
-                    }
-                }
-                .disableAutocorrection(true)
-                .multilineTextAlignment(.center)
-                .keyboardType(.numberPad)
+            .padding()
         }
-        .padding()
+        
+//          Text("Dollar amount (ARS/290)")
+//              .padding()
+//          Text(argentinaDollarText)
+      
+        Text("Dollar amount (COP/4531)")
+            .padding()
+        Text(dollarText)
+        if dollarText.count > 0 {
+            Text("Colombian Peso Amount")
+                .padding()
+        }
+      
+        TextField("Enter Colombian Peso", text: $pesoText)
+            .onChange(of: pesoText) { _ in
+                if let peso = Float(pesoText) {
+                    let conversion = peso / 4531
+                    let roundedValue = round(conversion * 100) / 100.0
+                  
+                  let argentinaConversion = peso / 290
+                  let argentinaRoundedValue = round(argentinaConversion * 100) / 100.0
+                  
+                    dollarText = String(roundedValue)
+                  argentinaDollarText = String(argentinaRoundedValue)
+                } else {
+                    dollarText = ""
+                  argentinaDollarText = ""
+                }
+            }
+            .disableAutocorrection(true)
+            .multilineTextAlignment(.center)
+            .keyboardType(.numberPad)
         
         //Text(Date.now, format: .dateTime.hour().minute())
       }
       Spacer()
+      
     }
 }
 
