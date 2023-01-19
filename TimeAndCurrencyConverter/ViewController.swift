@@ -25,7 +25,7 @@ class ViewController: UIViewController {
 class HomeViewHostingController: UIHostingController<SwiftUIView> {}
 
 struct SwiftUIView: View {
-   @State public var pesoText = ""
+   @State public var newCurrencyText = ""
    @State public var dollarText = ""
    @State public var argentinaDollarText = ""
     
@@ -68,25 +68,25 @@ struct SwiftUIView: View {
           
 
         
-          Text("Dollar amount (COP/4531)")
+          Text("Dollar amount (PEN/3.83)")
           Text(dollarText)
           if dollarText.count > 0 {
-              Text("Colombian Peso Amount")
+              Text("Peruvian Sol Amount")
           }
         
-          TextField("Enter Colombian Peso", text: $pesoText)
-              .onChange(of: pesoText) { _ in
-                  if let peso = Float(pesoText) {
-                      let conversion = peso / 4531
-                      let roundedValue = round(conversion * 100) / 100.0
+          TextField("Enter Peruvian Sol", text: $newCurrencyText)
+              .onChange(of: newCurrencyText) { _ in
+                  if let newCurrency = Float(newCurrencyText) {
+                    let conversion = newCurrency / 3.83
+                    let roundedValue = round(conversion * 100) / 100.0
                     
-                    let argentinaConversion = peso / 27.51
+                    let argentinaConversion = newCurrency / 27.51
                     let argentinaRoundedValue = round(argentinaConversion * 100) / 100.0
                     
-                      dollarText = String(roundedValue)
+                    dollarText = String(roundedValue)
                     argentinaDollarText = String(argentinaRoundedValue)
                   } else {
-                      dollarText = ""
+                    dollarText = ""
                     argentinaDollarText = ""
                   }
               }
