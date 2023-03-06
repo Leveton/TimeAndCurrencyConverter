@@ -34,7 +34,7 @@ struct SwiftUIView: View {
       
       ScrollView {
         LazyVStack {
-          if let PSTDate = Calendar.current.date(byAdding: .hour, value: -3, to: today) {
+          if let PSTDate = Calendar.current.date(byAdding: .hour, value: -2, to: today) {
               VStack {
                   Text("PST")
                   Text(PSTDate, format: .dateTime.hour().minute())
@@ -42,7 +42,7 @@ struct SwiftUIView: View {
               .padding()
           }
           
-          if let ESTDate = Calendar.current.date(byAdding: .hour, value: 0, to: today) {
+          if let ESTDate = Calendar.current.date(byAdding: .hour, value: +1, to: today) {
               VStack {
                   Text("EST")
                   Text(ESTDate, format: .dateTime.hour().minute())
@@ -50,7 +50,7 @@ struct SwiftUIView: View {
               .padding()
           }
           
-          if let UTCDate = Calendar.current.date(byAdding: .hour, value: +5, to: today) {
+          if let UTCDate = Calendar.current.date(byAdding: .hour, value: +6, to: today) {
               VStack {
                   Text("UTC")
                   Text(UTCDate, format: .dateTime.hour().minute())
@@ -58,33 +58,33 @@ struct SwiftUIView: View {
               .padding()
           }
           
-          if let BairesDate = Calendar.current.date(byAdding: .hour, value: +2, to: today) {
-              VStack {
-                  Text("Buenos Aires")
-                  Text(BairesDate, format: .dateTime.hour().minute())
-              }
-              .padding()
-          }
+//          if let BairesDate = Calendar.current.date(byAdding: .hour, value: +2, to: today) {
+//              VStack {
+//                  Text("Buenos Aires")
+//                  Text(BairesDate, format: .dateTime.hour().minute())
+//              }
+//              .padding()
+//          }
           
 
         
-          Text("Dollar amount (PEN/3.83)")
+          Text("Dollar amount (MXN*0.056)")
           Text(dollarText)
           if dollarText.count > 0 {
-              Text("Peruvian Sol Amount")
+              Text("Mexican Peso Amount")
           }
         
-          TextField("Enter Peruvian Sol", text: $newCurrencyText)
+          TextField("Enter Mexican Peso", text: $newCurrencyText)
               .onChange(of: newCurrencyText) { _ in
                   if let newCurrency = Float(newCurrencyText) {
-                    let conversion = newCurrency / 3.83
+                    let conversion = newCurrency * 0.056
                     let roundedValue = round(conversion * 100) / 100.0
                     
-                    let argentinaConversion = newCurrency / 27.51
-                    let argentinaRoundedValue = round(argentinaConversion * 100) / 100.0
+                    //let argentinaConversion = newCurrency / 27.51
+                    //let argentinaRoundedValue = round(argentinaConversion * 100) / 100.0
                     
                     dollarText = String(roundedValue)
-                    argentinaDollarText = String(argentinaRoundedValue)
+                    //argentinaDollarText = String(argentinaRoundedValue)
                   } else {
                     dollarText = ""
                     argentinaDollarText = ""
