@@ -27,7 +27,7 @@ class HomeViewHostingController: UIHostingController<SwiftUIView> {}
 struct SwiftUIView: View {
    @State public var pesoText = ""
    @State public var dollarText = ""
-   @State public var argentinaDollarText = ""
+   //@State public var argentinaDollarText = ""
     
     var body: some View {
       let today = Date()
@@ -58,17 +58,17 @@ struct SwiftUIView: View {
               .padding()
           }
           
-          if let BairesDate = Calendar.current.date(byAdding: .hour, value: +2, to: today) {
-              VStack {
-                  Text("Buenos Aires")
-                  Text(BairesDate, format: .dateTime.hour().minute())
-              }
-              .padding()
-          }
+//          if let BairesDate = Calendar.current.date(byAdding: .hour, value: +2, to: today) {
+//              VStack {
+//                  Text("Buenos Aires")
+//                  Text(BairesDate, format: .dateTime.hour().minute())
+//              }
+//              .padding()
+//          }
           
 
         
-          Text("Dollar amount (COP/4531)")
+          Text("Dollar amount (COP * 0.00024)")
           Text(dollarText)
           if dollarText.count > 0 {
               Text("Colombian Peso Amount")
@@ -77,17 +77,18 @@ struct SwiftUIView: View {
           TextField("Enter Colombian Peso", text: $pesoText)
               .onChange(of: pesoText) { _ in
                   if let peso = Float(pesoText) {
-                      let conversion = peso / 4531
+                      //let conversion = peso / 4531
+											let conversion = peso * 0.00024
                       let roundedValue = round(conversion * 100) / 100.0
                     
-                    let argentinaConversion = peso / 27.51
-                    let argentinaRoundedValue = round(argentinaConversion * 100) / 100.0
+											//let argentinaConversion = peso / 27.51
+											//let argentinaRoundedValue = round(argentinaConversion * 100) / 100.0
                     
                       dollarText = String(roundedValue)
-                    argentinaDollarText = String(argentinaRoundedValue)
+											//argentinaDollarText = String(argentinaRoundedValue)
                   } else {
                       dollarText = ""
-                    argentinaDollarText = ""
+											//argentinaDollarText = ""
                   }
               }
               .disableAutocorrection(true)
